@@ -1,0 +1,94 @@
+BANCO DE DADOS ZABBIX COM DEBIAN 10 BUSTER
+
+PREPARACAO DEBIAN 10
+
+- apt-get -q -y update
+- apt-get -q -y upgrade
+- apt-get -q -y install curl gnupg2
+- apt-get -q -y install wget htop
+- timedatectl
+- timedatectl set-timezone America/Sao_Paulo
+- apt-get -y update
+- apt-get -y install ntpdate
+- ntpdate a.ntp.br
+- /sbin/ntpdate a.ntp.br
+  # PARA EVITAR ERRO DE PATH
+- export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+
+INSTALACAO POSTGRESQL 12
+  # CRIAR ARQUIVO DO REPOSITORIO
+- echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" >> /etc/apt/sources.list.d/pgdg.list
+  # IMPORT CHAVE DO REPOSITORIO
+- wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+  # FAZER UPDATE
+- apt-get -q update
+  # INSTALAR POSTGREE SERVER
+- apt-get -q -y install postgresql-12
+  # INSTALAR POSTGREE CLIENTE
+- apt-get -q -y install postgresql-client-12
+  # REINICIAR SERVIÃ‡O
+- /etc/init.d/postgresql restart
+  # VERIFICAR STATUS 
+- /etc/init.d/postgresql status
+  # VERIFICAR LOGs
+- tail -f /var/log/postgresql/postgresql-12-main.log 
+  # LIBERAR ACESSO REMOTO DO BANCO DE DADOS
+- sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/12/main/postgresql.conf
+- host  all  all 0.0.0.0/0 md5
+ # REINICIAR SERVICO
+- /etc/init.d/postgresql restart
+
+SEGURANCA POSTGRESQL 12
+
+- su - postgres
+- psql
+	\password
+	Enter new password:
+ # EDITAR ARQUIVO
+- nano /etc/postgresql/12/main/pg_hba.conf
+	"local   all             postgres                                md5" SEM ASPAS
+
+INSTALACAO BANCO DE DADOS ZABBIX
+
+- wget https://repo.zabbix.com/zabbix/5.4/debian/pool/main/z/zabbix-release/zabbix-release_5.4-1+debian10_all.deb
+- dpkg -i zabbix-release_5.4-1+debian10_all.deb
+- apt update
+- apt-get -q -y install zabbix-server-pgsql zabbix-sql-scripts zabbix-agent
+- systemctl restart zabbix-server
+- systemctl enable zabbix-server zabbix-agent
+
+CRIACAO DO BANCO DE DADOS ZABBIX
+
+- su - postgres
+	createuser --pwprompt zabbix
+	Enter password for new role: digite_sua_senha
+	createdb -O zabbix -E Unicode -T template0 zabbix
+
+IMPORTAR ESQUEMA INICIAL
+su - postgres
+zcat /usr/share/doc/zabbix-sql-scripts/postgresql/create.sql.gz | psql zabbix
+
+INSTALAR TIMESCALE DB
+
+- curl -s https://packagecloud.io/install/repositories/timescale/timescaledb/script.deb.sh |  bash
+- apt-get -q update
+- apt-get -q install -y timescaledb-2-postgresql-12
+
+ # ACESSE A MAQUINA ZABBIX-SERVER E PARE O ZABBIX
+- /etc/init.d/zabbix-server stop 
+
+ # VOLTAMOS A MAQUINA DO BANCO DE DADOS VAMOS FAZER O TUNE 
+- su - postgres
+ 	timescaledb-tune --quiet --yes
+- sed -i "s/max_connections = 20/max_connections = 50/" /etc/postgresql/12/main/postgresql.conf
+- /etc/init.d/postgresql restart
+- /etc/init.d/postgresql status
+
+# INICIANDO MIGRACAO DAS TABELAS
+- su - postgres
+	echo "CREATE EXTENSION IF NOT EXISTS timescaledb VERSION '1.7.4' CASCADE;" | psql zabbix
+	cat /usr/share/doc/zabbix-sql-scripts/postgresql*/timescaledb.sql | psql zabbix
+- /etc/init.d/postgresql restart
+# ACESSE A MAQUINA ZABBIX-SERVER E INICIE O ZABBIX
+
+- /etc/init.d/zabbix-server start
