@@ -10,7 +10,6 @@ PREPARACAO DEBIAN 10
 - timedatectl set-timezone America/Sao_Paulo
 - apt-get -y update
 - apt-get -y install ntpdate
-- ntpdate a.ntp.br
 - /sbin/ntpdate a.ntp.br
   # PARA EVITAR ERRO DE PATH
 - export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
@@ -87,7 +86,9 @@ INSTALAR TIMESCALE DB
 # INICIANDO MIGRACAO DAS TABELAS
 - su - postgres
 	echo "CREATE EXTENSION IF NOT EXISTS timescaledb VERSION '1.7.4' CASCADE;" | psql zabbix
+	password postgres		
 	cat /usr/share/doc/zabbix-sql-scripts/postgresql*/timescaledb.sql | psql zabbix
+	password postgres
 - /etc/init.d/postgresql restart
 # ACESSE A MAQUINA ZABBIX-SERVER E INICIE O ZABBIX
 
