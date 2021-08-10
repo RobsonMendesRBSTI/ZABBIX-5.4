@@ -33,7 +33,8 @@ INSTALACAO POSTGRESQL 12
 - tail -f /var/log/postgresql/postgresql-12-main.log 
   # LIBERAR ACESSO REMOTO DO BANCO DE DADOS
 - sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/12/main/postgresql.conf
-- host  all  all 0.0.0.0/0 md5
+- nano /etc/postgresql/12/main/pg_hba.conf
+ adicionar no final host  all  all 0.0.0.0/0 md5
  # REINICIAR SERVICO
 - /etc/init.d/postgresql restart
 
