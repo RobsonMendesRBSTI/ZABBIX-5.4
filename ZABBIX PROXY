@@ -38,7 +38,34 @@ INSTALACAO ZABBIX PROXY
             Hostname=Zabbix proxy 01
             DBName=zabbix_proxy
             DBUser=zabbix
+            
+            StartPollers=80
+            StartIPMIPollers=10
+            StartPollersUnreachable=80
+            StartPingers=10
+            StartIPMIPollers=10
+            StartTrappers=20
+            StartDBSyncers=8
+
+           VMwareCacheSize=128M
+           CacheSize=64M
+           HistoryCacheSize=128M
+           TrendCacheSize=128M
+           HistoryIndexCacheSize=64M
 -  /etc/init.d/zabbix-proxy restart
+
+HABLITANDO CRIPTOGRAFIA
+- openssl rand -hex 32
+  INSERIR CHAVE GERADA NO ARQUIVO ABAIXO
+- nano /etc/zabbix/zabbix_proxy.psk
+- /etc/zabbix/zabbix_proxy.conf
+    TLSConnect=psk
+    TLSAccept=psk
+    TLSPSKFile=/etc/zabbix/zabbix_proxy.psk
+    TLSPSKIdentity=ZBX-PSK-01
+- /etc/init.d/zabbix-proxy restart
+
+
 
             
            
