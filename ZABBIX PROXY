@@ -39,19 +39,16 @@ INSTALACAO ZABBIX PROXY
             DBName=zabbix_proxy
             DBUser=zabbix
             
-            StartPollers=80
-            StartIPMIPollers=10
-            StartPollersUnreachable=80
-            StartPingers=10
-            StartIPMIPollers=10
-            StartTrappers=20
-            StartDBSyncers=8
+StartPollers=100
+StartPollersUnreachable=50
+StartPingers=50
+StartTrappers=10
+StartDiscoverers=15
+StartHTTPPollers=5
+CacheSize=128M
+HistoryCacheSize=64M
+HistoryIndexCacheSize=32M
 
-           VMwareCacheSize=128M
-           CacheSize=64M
-           HistoryCacheSize=128M
-           TrendCacheSize=128M
-           HistoryIndexCacheSize=64M
 -  /etc/init.d/zabbix-proxy restart
 
 HABLITANDO CRIPTOGRAFIA
