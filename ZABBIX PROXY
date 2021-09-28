@@ -1,0 +1,44 @@
+ZABBIX PROXY COM DEBIAN 10 BUSTER
+
+PREPARACAO DEBIAN 10
+
+- apt-get -q -y update
+- apt-get -q -y upgrade
+- apt-get -q -y install gnupg2
+- apt-get -q -y install wget htop
+- timedatectl
+- timedatectl set-timezone America/Sao_Paulo
+- apt-get -y update
+- apt-get -y install ntpdate
+- /sbin/ntpdate a.ntp.br
+  # PARA EVITAR ERRO DE PATH
+- export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+
+INSTALACAO ZABBIX PROXY
+
+- wget https://repo.zabbix.com/zabbix/5.4/debian/pool/main/z/zabbix-release/zabbix-release_5.4-1+debian11_all.deb
+- dpkg -i zabbix-release_5.4-1+debian11_all.deb
+- apt update
+- apt -y install zabbix-proxy-mysql zabbix-sql-scripts
+- apt -y install mariadb-common mariadb-server mariadb-client
+- systemctl start mariadb
+- systemctl enable mariadb
+- mysql_secure_installation
+- mysql -uroot -p'rootDBpass'
+  create database zabbix_proxy character set utf8 collate utf8_bin;
+  grant all privileges on zabbix_proxy.* to zabbix@localhost identified by 'zabbixDBpass';
+  quit;
+- zcat /usr/share/doc/zabbix-sql-scripts/mysql/schema.sql.gz | mysql -uzabbix -p'zabbixDBpass' zabbix_proxy
+- /etc/init.d/zabbix-proxy restart
+- systemctl enable zabbix-proxy
+- nano /etc/zabbix/zabbix_proxy.conf
+            DBPassword=zabbixDBpass
+            ConfigFrequency=100
+            Server=10.7.44.235
+            Hostname=Zabbix proxy 01
+            DBName=zabbix_proxy
+            DBUser=zabbix
+-  /etc/init.d/zabbix-proxy restart
+
+            
+           
