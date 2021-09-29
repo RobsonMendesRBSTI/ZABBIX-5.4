@@ -1,0 +1,1 @@
+last("PE-TAIOBEIRAS-S6730-H48X6C:net.if.in[ifHCInOctets.126]")+last("PE-SW6730-CTF-SLN:net.if.in[ifHCInOctets.131]")+last("PE-TAIOBEIRAS-S6730-H48X6C:net.if.in[ifHCInOctets.122]")
