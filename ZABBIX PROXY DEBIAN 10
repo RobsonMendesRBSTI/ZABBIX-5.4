@@ -2,17 +2,7 @@ ZABBIX PROXY COM DEBIAN 10
 
 PREPARACAO DEBIAN 10
 
-- apt-get -q -y update
-- apt-get -q -y upgrade
-- apt-get -q -y install gnupg2
-- apt-get -q -y install wget htop
-- timedatectl
-- timedatectl set-timezone America/Sao_Paulo
-- apt-get -y update
-- apt-get -y install ntpdate
-- /sbin/ntpdate a.ntp.br
-  # PARA EVITAR ERRO DE PATH
-- export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+apt-get -q -y update && apt-get -q -y upgrade && apt-get -q -y install curl gnupg2 && apt-get -q -y install wget htop && timedatectl && timedatectl set-timezone America/Sao_Paulo && timedatectl set-timezone America/Sao_Paulo && apt-get -y update && apt-get -y install ntpdate && /sbin/ntpdate a.ntp.br && export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
 
 INSTALACAO ZABBIX PROXY
 
