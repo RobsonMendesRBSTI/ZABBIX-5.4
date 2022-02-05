@@ -2,6 +2,9 @@ BANCO DE DADOS ZABBIX COM DEBIAN 10 BUSTER
 
 PREPARACAO DEBIAN 10
 
+VERIFICAR VERSAO DEBIAN
+lsb_release -a
+
 apt-get -q -y update && apt-get -q -y upgrade && apt-get -q -y install curl gnupg2 && apt-get -q -y install wget htop && timedatectl && timedatectl set-timezone America/Sao_Paulo && timedatectl set-timezone America/Sao_Paulo && apt-get -y update && apt-get -y install ntpdate && /sbin/ntpdate a.ntp.br && export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
 
 INSTALACAO POSTGRESQL 12
