@@ -40,15 +40,18 @@ SEGURANCA POSTGRESQL 12
  # EDITAR ARQUIVO
 - nano /etc/postgresql/12/main/pg_hba.conf
 	"local   all             postgres                                md5" SEM ASPAS
+	
+- /etc/init.d/postgresql restart
+- /etc/init.d/postgresql status
 
 INSTALACAO BANCO DE DADOS ZABBIX
 
 - wget https://repo.zabbix.com/zabbix/5.4/debian/pool/main/z/zabbix-release/zabbix-release_5.4-1+debian10_all.deb
 - dpkg -i zabbix-release_5.4-1+debian10_all.deb
 - apt update
-- apt-get -q -y install zabbix-server-pgsql zabbix-sql-scripts zabbix-agent
+- apt-get -q -y install zabbix-sql-scripts zabbix-agent
 - systemctl restart zabbix-server
-- systemctl enable zabbix-server zabbix-agent
+- systemctl enable  zabbix-agent
 
 CRIACAO DO BANCO DE DADOS ZABBIX
 
