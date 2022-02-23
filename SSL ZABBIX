@@ -1,0 +1,8 @@
+- PRIMEIRA COISA CRIAR O DOMINIO OU SUBIDOMINIO E VERIFICAR FIREWALL E ACLS
+zabbix01.rbsti.com.br
+
+- apt install certbot
+- /etc/init.d/nginx stop
+- certbot certonly --standalone 
+- /etc/init.d/nginx start
+- 
